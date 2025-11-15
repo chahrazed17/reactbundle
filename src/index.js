@@ -4,12 +4,10 @@ import App from './App';
 
 /**
  * Fonction de rendu exposée au niveau global.
- * Le LWC appellera cette fonction pour monter le composant React.
- * @param {string} elementId - L'ID du DIV dans le LWC où monter l'application.
+ * @param {HTMLElement} container - L'élément DOM (div) du LWC où monter l'application. 
  * @param {object} props - Les propriétés (données) passées du LWC à React.
  */
-function renderReactApp(elementId, props) {
-    const container = document.getElementById(elementId);
+function renderReactApp(container, props) {
     
     if (container) {
         // Démarre le rendu React dans le conteneur cible du LWC
@@ -20,10 +18,9 @@ function renderReactApp(elementId, props) {
             container
         );
     } else {
-        console.error(`Le conteneur DOM avec l'ID "${elementId}" est introuvable.`);
+        console.error(`Le conteneur DOM (objet) passé est invalide. LWC n'a pas pu trouver l'hôte.`);
     }
 }
 
-// IMPORTANT : Exportez la fonction de rendu comme 'default'. 
-// Cela correspond à 'libraryExport: default' dans webpack.config.js.
+// Exportez la fonction de rendu comme 'default' pour Webpack
 export default renderReactApp;

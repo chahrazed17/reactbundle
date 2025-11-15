@@ -38,7 +38,6 @@ module.exports = {
                 use: ['style-loader', 'css-loader'],
             },
             // Règle pour les fichiers images (SVG, PNG, JPG)
-            // Ils sont encodés en Base64 et inclus directement dans le bundle JS.
             {
                 test: /\.(png|jpe?g|gif|svg)$/i,
                 type: 'asset/inline',
