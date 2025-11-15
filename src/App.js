@@ -1,25 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import ReactDOM from 'react-dom';
+// IMPORTANT : Forcer l'importation de App.jsx pour éviter toute ambiguïté avec App.js.
+import App from './App.jsx'; 
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+/**
+ * Fonction de rendu exposée au niveau global par Webpack.
+ * @param {HTMLElement} container - L'élément DOM (div) du LWC où monter l'application, passé directement.
+ * @param {object} props - Les propriétés (données) passées du LWC à React.
+ */
+function renderReactApp(container, props) {
+    
+    if (container) {
+        // Démarre le rendu React dans le conteneur cible du LWC
+        ReactDOM.render(
+            <React.StrictMode>
+                <App {...props} />
+            </React.StrictMode>,
+            container
+        );
+    } else {
+        // Ce message est un filet de sécurité si le LWC ne passe rien.
+        console.error(`Le conteneur DOM (objet) passé est invalide. LWC n'a pas pu trouver l'hôte.`);
+    }
 }
 
-export default App;
+// IMPORTANT : Exportez la fonction de rendu comme 'default'.
+// C'est ce qui permet à Webpack de la nommer 'window.ReactApp' grâce aux paramètres 'library' et 'libraryExport'.
+export default renderReactApp;
