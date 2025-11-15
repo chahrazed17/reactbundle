@@ -1,17 +1,29 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
+import ReactDOM from 'react-dom';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+/**
+ * Fonction de rendu exposée au niveau global.
+ * Le LWC appellera cette fonction pour monter le composant React.
+ * @param {string} elementId - L'ID du DIV dans le LWC où monter l'application.
+ * @param {object} props - Les propriétés (données) passées du LWC à React.
+ */
+function renderReactApp(elementId, props) {
+    const container = document.getElementById(elementId);
+    
+    if (container) {
+        // Démarre le rendu React dans le conteneur cible du LWC
+        ReactDOM.render(
+            <React.StrictMode>
+                <App {...props} />
+            </React.StrictMode>,
+            container
+        );
+    } else {
+        console.error(`Le conteneur DOM avec l'ID "${elementId}" est introuvable.`);
+    }
+}
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+// IMPORTANT : Exportez la fonction de rendu comme 'default'. 
+// Cela correspond à 'libraryExport: default' dans webpack.config.js.
+export default renderReactApp;
