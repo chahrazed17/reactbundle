@@ -1,17 +1,15 @@
-import React from 'react';
+Import React from 'react';
 import ReactDOM from 'react-dom';
-// IMPORTANT : Forcer l'importation de App.jsx pour éviter toute ambiguïté avec App.js.
 import App from './App.jsx'; 
 
 /**
- * Fonction de rendu exposée au niveau global par Webpack.
- * @param {HTMLElement} container - L'élément DOM (div) du LWC où monter l'application, passé directement.
+ * Fonction de rendu exposée au niveau global par Webpack (Utilisée par LWC).
+ * @param {HTMLElement} container - L'élément DOM du LWC où monter l'application.
  * @param {object} props - Les propriétés (données) passées du LWC à React.
  */
-function renderReactApp(container, props) {
-    
+function ReactApp(container, props) {
     if (container) {
-        // Démarre le rendu React dans le conteneur cible du LWC
+        // Mode Production (LWC/Salesforce)
         ReactDOM.render(
             <React.StrictMode>
                 <App {...props} />
@@ -19,11 +17,28 @@ function renderReactApp(container, props) {
             container
         );
     } else {
-        // Ce message est un filet de sécurité si le LWC ne passe rien.
-        console.error(`Le conteneur DOM (objet) passé est invalide. LWC n'a pas pu trouver l'hôte.`);
+        console.error(`Le conteneur DOM passé par le LWC est invalide.`);
     }
 }
 
-// IMPORTANT : Exportez la fonction de rendu comme 'default'.
-// C'est ce qui permet à Webpack de la nommer 'window.ReactApp' grâce aux paramètres 'library' et 'libraryExport'.
-export default renderReactApp;
+// =========================================================================
+// Logique d'exécution locale pour le développement (pour le navigateur standard)
+// =========================================================================
+
+// Vérifie si l'application est en cours d'exécution dans un environnement non-Salesforce
+// et si l'élément DOM 'root' existe (ce qui est le cas dans public/index.html).
+const devRoot = document.getElementById('root');
+if (devRoot) {
+    console.log("Démarrage en mode Développement Local...");
+    ReactDOM.render(
+        <React.StrictMode>
+            {/* En mode dev, on passe des données mockées (fausses) pour simuler l'entrée du LWC.
+            */}
+            <App initialMessage="Ceci est un message de test en mode dev !" />
+        </React.StrictMode>,
+        devRoot
+    );
+}
+
+// Export pour le LWC (mode Production)
+export default ReactApp;
