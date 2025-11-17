@@ -1,7 +1,28 @@
 import React, { useState } from 'react';
 // import './App.css'; // Maintenu pour la structure si nécessaire
 
-function App({ initialMessage }) {
+function App({ initialMessage,onFinish }) {
+    /**
+   * Fonction exécutée quand l'utilisateur clique sur le bouton React.
+   * Elle appelle la fonction de rappel fournie par le LWC.
+   */
+  const handleButtonClick = () => {
+    if (typeof onFinish === 'function') {
+      
+      // On appelle la fonction LWC et on lui passe des données en paramètre
+      onFinish({
+        status: 'Success',
+        transactionId: Date.now(),
+        message: 'Action terminée par React.'
+      });
+      
+      // Confirmation dans l'interface React
+      alert("Action terminée dans React. Vérifiez la notification Toast Salesforce!");
+      
+    } else {
+      console.error("La fonction onFinish n'a pas été fournie par le LWC.");
+    }
+  };
     // État pour les champs du formulaire
     const [formData, setFormData] = useState({
         fullName: '',
@@ -119,7 +140,7 @@ function App({ initialMessage }) {
         <div style={containerStyle}>
             <h1 style={headerStyle}>Ouverture de Compte Bancaire</h1>
             
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleButtonClick}>
                 
                 {/* 1. Nom Complet */}
                 <div style={formGroupStyle}>
